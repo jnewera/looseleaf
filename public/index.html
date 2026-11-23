@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Journal</title>
+  <link rel="icon" href="icon.svg" type="image/svg+xml">
+  <!-- Applies the saved theme before first paint to avoid a flash. -->
+  <script src="js/theme-init.js"></script>
+  <link rel="stylesheet" href="css/notebook.css">
+</head>
+<body>
+  <aside class="sidebar">
+    <header class="sidebar-head">
+      <h1>Journal</h1>
+      <button id="theme-toggle" class="icon-btn" type="button" title="Toggle dark mode" aria-label="Toggle dark mode">◐</button>
+    </header>
+    <input id="search" type="search" placeholder="Search pages…  (Ctrl+F)" autocomplete="off" spellcheck="false">
+    <nav id="index" class="index" aria-label="Pages"></nav>
+    <footer class="sidebar-foot">
+      <button id="new-page" type="button" title="Ctrl+Shift+N">+ New page</button>
+      <div class="row">
+        <button id="export-json" type="button" title="Full backup you can import later">Export JSON</button>
+        <button id="export-md" type="button" title="Readable Markdown copy">Export MD</button>
+      </div>
+      <button id="import" type="button">Import backup…</button>
+      <input id="import-file" type="file" accept=".json,application/json" hidden>
+      <p id="status" class="status" role="status">Loading…</p>
+    </footer>
+  </aside>
+
+  <main id="notebook" class="notebook"></main>
+
+  <template id="page-template">
+    <section class="page">
+      <div class="holes" aria-hidden="true"><span></span><span></span><span></span></div>
+      <header class="page-head">
+        <input class="page-date" type="date" aria-label="Page date">
+        <span class="page-num"></span>
+        <button class="page-delete icon-btn" type="button" title="Delete page" aria-label="Delete page">✕</button>
+      </header>
+      <div class="editor" contenteditable="true" spellcheck="true" role="textbox" aria-multiline="true"></div>
+    </section>
+  </template>
+
+  <dialog id="import-dialog">
+    <form method="dialog">
+      <h2>Import backup</h2>
+      <p id="import-summary"></p>
+      <p><strong>Merge</strong> keeps the newer copy of each page.<br>
+         <strong>Replace</strong> swaps your whole journal for the backup. A safety backup is saved first either way.</p>
+      <menu>
+        <button value="cancel">Cancel</button>
+        <button value="merge">Merge</button>
+        <button value="replace" class="danger">Replace</button>
+      </menu>
+    </form>
+  </dialog>
+
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>

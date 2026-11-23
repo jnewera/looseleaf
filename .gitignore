@@ -1,0 +1,7 @@
+# Your journal entries. Never commit these.
+data/
+
+node_modules/
+*.log
+.DS_Store
+Thumbs.db

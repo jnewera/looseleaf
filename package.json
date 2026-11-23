@@ -1,0 +1,15 @@
+{
+  "name": "notebook-journal",
+  "version": "0.1.0",
+  "description": "A fast, local-first journal that looks and feels like a college-ruled paper notebook.",
+  "type": "module",
+  "private": true,
+  "license": "MIT",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "start": "node server/server.js",
+    "test": "node --test"
+  }
+}
