@@ -62,7 +62,7 @@ async function flush({ keepalive = false } = {}) {
   const failed = ids.filter((_, i) => results[i].status === 'rejected');
   if (failed.length) {
     failed.forEach((id) => dirty.add(id));
-    setStatus('Not saved: is the journal server running? Retrying…', true);
+    setStatus('Not saved: is the Looseleaf server running? Retrying…', true);
     saveTimer = setTimeout(flush, 3000);
   } else if (ids.length) {
     setStatus(`Saved ${new Date().toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })}`);
@@ -237,7 +237,7 @@ async function deletePage(page) {
       if (!String(err.message).startsWith('404')) throw err; // never saved yet: fine
     });
   } catch {
-    setStatus('Could not delete: is the journal server running?', true);
+    setStatus('Could not delete: is the Looseleaf server running?', true);
     return;
   }
   pages = pages.filter((p) => p !== page);
@@ -252,7 +252,7 @@ async function deletePage(page) {
 // ---------- Import / export ----------
 
 function exportName(ext) {
-  return `journal-${today()}.${ext}`;
+  return `looseleaf-${today()}.${ext}`;
 }
 
 async function importFile(file) {
@@ -345,7 +345,7 @@ async function init() {
     const nb = await api.getNotebook();
     pages = nb.pages.filter((p) => !p.deleted).sort((a, b) => a.order - b.order);
   } catch {
-    setStatus('Could not reach the journal server. Start it with "npm start".', true);
+    setStatus('Could not reach the Looseleaf server. Start it with "npm start".', true);
     return;
   }
   renderAll();

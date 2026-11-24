@@ -120,8 +120,8 @@ if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.me
   const store = await new Store(dataDir).load();
   createServer(store)
     .on('error', (err) => {
-      console.error(err.code === 'EADDRINUSE' ? `Port ${port} is already in use (is the journal already running?)` : err);
+      console.error(err.code === 'EADDRINUSE' ? `Port ${port} is already in use (is Looseleaf already running?)` : err);
       process.exit(1);
     })
-    .listen(port, '127.0.0.1', () => console.log(`Journal running at http://127.0.0.1:${port}  (data: ${dataDir})`));
+    .listen(port, '127.0.0.1', () => console.log(`Looseleaf running at http://127.0.0.1:${port}  (data: ${dataDir})`));
 }

@@ -49,7 +49,7 @@ test('serves the app shell', async () => {
   const res = await req('GET', '/');
   assert.equal(res.status, 200);
   assert.match(res.headers['content-type'], /text\/html/);
-  assert.match(res.text, /<title>Journal<\/title>/);
+  assert.match(res.text, /<title>Looseleaf<\/title>/);
 });
 
 test('rejects non-localhost Host headers (DNS rebinding)', async () => {

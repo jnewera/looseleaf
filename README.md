@@ -1,14 +1,14 @@
-# Notebook Journal
+# Looseleaf
 
 A fast, private journal that looks and feels like a **college-ruled paper notebook**, with checklists you can tick off and pages you can keep adding.
 It runs entirely on your own computer. There are **zero dependencies**: just Node.js and a browser.
 
-![Notebook Journal in light mode](docs/screenshot-light.png)
+![Looseleaf in light mode](docs/screenshot-light.png)
 
 <details>
 <summary>Dark mode</summary>
 
-![Notebook Journal in dark mode](docs/screenshot-dark.png)
+![Looseleaf in dark mode](docs/screenshot-dark.png)
 </details>
 
 ## Features
@@ -30,12 +30,12 @@ It runs entirely on your own computer. There are **zero dependencies**: just Nod
 Requires [Node.js](https://nodejs.org) 20+.
 
 ```bash
-git clone https://github.com/jnewera/notebook-journal.git
-cd notebook-journal
+git clone https://github.com/jnewera/looseleaf.git
+cd looseleaf
 npm start            # → http://127.0.0.1:4317
 ```
 
-**On Windows**, double-click `Journal.vbs`. It starts the server in the background (only if it isn't already running) and opens the journal in its own Edge app window. For one-click access, right-click it and choose *Send to → Desktop (create shortcut)*.
+**On Windows**, double-click `Looseleaf.vbs`. It starts the server in the background (only if it isn't already running) and opens the journal in its own Edge app window. For one-click access, right-click it and choose *Send to → Desktop (create shortcut)*.
 
 Your entries are stored in `data/journal.json`, with daily backups in `data/backups/`. The `data/` folder is gitignored and never leaves your machine.
 

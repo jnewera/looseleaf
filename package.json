@@ -1,7 +1,7 @@
 {
-  "name": "notebook-journal",
+  "name": "looseleaf",
   "version": "0.1.0",
-  "description": "A fast, local-first journal that looks and feels like a college-ruled paper notebook.",
+  "description": "Looseleaf: a fast, local-first journal that looks and feels like a college-ruled paper notebook.",
   "type": "module",
   "private": true,
   "license": "MIT",

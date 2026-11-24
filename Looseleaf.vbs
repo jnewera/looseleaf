@@ -1,4 +1,4 @@
-' Double-click to open your journal.
+' Double-click to open Looseleaf.
 ' Starts the local server (hidden) if it isn't running, then opens Edge in app mode.
 Option Explicit
 
@@ -29,8 +29,8 @@ If Not ServerUp() Then
     If ServerUp() Then Exit For
   Next
   If Not ServerUp() Then
-    MsgBox "Could not start the journal server." & vbCrLf & _
-           "Make sure Node.js is installed, then try 'npm start' in " & here, vbExclamation, "Journal"
+    MsgBox "Could not start the Looseleaf server." & vbCrLf & _
+           "Make sure Node.js is installed, then try 'npm start' in " & here, vbExclamation, "Looseleaf"
     WScript.Quit 1
   End If
 End If

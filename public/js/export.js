@@ -5,7 +5,7 @@ export function toJson(pages) {
 }
 
 export function toMarkdown(pages) {
-  const out = ['# Journal', ''];
+  const out = ['# Looseleaf', ''];
   pages.forEach((page, i) => {
     out.push(`## Page ${i + 1} · ${page.date}`, '');
     for (const line of page.lines) {
