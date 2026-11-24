@@ -85,3 +85,11 @@ test('rejects invalid JSON', async () => {
   const res = await req('PUT', `/api/pages/${page.id}`, { body: '{not json' });
   assert.equal(res.status, 400);
 });
+
+test('meta round trip', async () => {
+  const meta = { title: 'My Notes', owner: 'Jay', updatedAt: '2026-11-24T10:00:00.000Z' };
+  assert.equal((await req('PUT', '/api/meta', { body: meta })).status, 200);
+  const nb = JSON.parse((await req('GET', '/api/notebook')).text);
+  assert.deepEqual(nb.meta, meta);
+  assert.equal((await req('PUT', '/api/meta', { body: { ...meta, title: 42 } })).status, 400);
+});

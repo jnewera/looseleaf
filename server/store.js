@@ -43,6 +43,18 @@ export function sanitizePage(input) {
   };
 }
 
+export const DEFAULT_META = Object.freeze({ title: 'Looseleaf', owner: '', updatedAt: new Date(0).toISOString() });
+
+/** Validate notebook-level details shown on the cover. Throws on bad input. */
+export function sanitizeMeta(input) {
+  if (!input || typeof input !== 'object') throw new ValidationError('meta must be an object');
+  const { title, owner, updatedAt } = input;
+  if (typeof title !== 'string' || title.length > 80) throw new ValidationError('invalid title');
+  if (typeof owner !== 'string' || owner.length > 80) throw new ValidationError('invalid owner');
+  if (typeof updatedAt !== 'string' || Number.isNaN(Date.parse(updatedAt))) throw new ValidationError('invalid updatedAt');
+  return { title: title.trim() || DEFAULT_META.title, owner: owner.trim(), updatedAt };
+}
+
 export class ValidationError extends Error {}
 
 export class Store {
@@ -56,7 +68,7 @@ export class Store {
     this.backupDir = path.join(dir, 'backups');
     this.backupKeep = backupKeep;
     this.now = now;
-    this.data = { version: 1, pages: [] };
+    this.data = { version: 1, meta: { ...DEFAULT_META }, pages: [] };
     this.queue = Promise.resolve();
   }
 
@@ -64,16 +76,29 @@ export class Store {
     await fs.mkdir(this.backupDir, { recursive: true });
     try {
       const parsed = JSON.parse(await fs.readFile(this.file, 'utf8'));
-      this.data = { version: 1, pages: (parsed.pages ?? []).map(sanitizePage) };
+      this.data = {
+        version: 1,
+        meta: parsed.meta ? sanitizeMeta(parsed.meta) : { ...DEFAULT_META },
+        pages: (parsed.pages ?? []).map(sanitizePage),
+      };
     } catch (err) {
       if (err.code !== 'ENOENT') throw err;
     }
     return this;
   }
 
-  /** All pages (including tombstones), sorted by order. */
+  /** Notebook details plus all pages (including tombstones), sorted by order. */
   notebook() {
-    return { version: 1, pages: [...this.data.pages].sort((a, b) => a.order - b.order) };
+    return { version: 1, meta: { ...this.data.meta }, pages: [...this.data.pages].sort((a, b) => a.order - b.order) };
+  }
+
+  /** Last-write-wins update of the notebook's title/owner. Returns the stored meta. */
+  async setMeta(input) {
+    const meta = sanitizeMeta(input);
+    if (Date.parse(meta.updatedAt) < Date.parse(this.data.meta.updatedAt)) return { ...this.data.meta };
+    this.data.meta = meta;
+    await this.save();
+    return { ...meta };
   }
 
   /** Last-write-wins upsert. Returns the stored page. */
@@ -117,6 +142,11 @@ export class Store {
       }
     }
     this.data.pages = [...byId.values()];
+    if (notebook.meta) {
+      const meta = sanitizeMeta(notebook.meta);
+      if (mode === 'replace') this.data.meta = { ...meta, updatedAt: stamp };
+      else if (Date.parse(meta.updatedAt) > Date.parse(this.data.meta.updatedAt)) this.data.meta = meta;
+    }
     await this.save();
     return this.notebook();
   }

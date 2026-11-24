@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
-import { Store, sanitizePage, ValidationError } from '../server/store.js';
+import { Store, sanitizePage, sanitizeMeta, ValidationError } from '../server/store.js';
 
 let dir;
 beforeEach(async () => {
@@ -91,4 +91,30 @@ test('import: merge keeps newer pages, replace tombstones old ones', async () =>
 
   const backups = await fs.readdir(path.join(dir, 'backups'));
   assert.ok(backups.some((f) => f.includes('preimport')), 'safety backup before import');
+});
+
+test('meta: defaults, validation, last-write-wins, persistence', async () => {
+  const s = await new Store(dir).load();
+  assert.equal(s.notebook().meta.title, 'Looseleaf');
+
+  const saved = await s.setMeta({ title: '  Field Notes ', owner: 'Jay', updatedAt: '2026-11-24T10:00:00.000Z' });
+  assert.deepEqual(saved, { title: 'Field Notes', owner: 'Jay', updatedAt: '2026-11-24T10:00:00.000Z' });
+
+  const stale = await s.setMeta({ title: 'Old', owner: '', updatedAt: '2026-11-24T09:00:00.000Z' });
+  assert.equal(stale.title, 'Field Notes');
+
+  const blank = await s.setMeta({ title: '   ', owner: '', updatedAt: '2026-11-24T11:00:00.000Z' });
+  assert.equal(blank.title, 'Looseleaf', 'blank title falls back to default');
+
+  assert.throws(() => sanitizeMeta({ title: 'x'.repeat(81), owner: '', updatedAt: blank.updatedAt }), ValidationError);
+  assert.throws(() => sanitizeMeta({ title: 'ok', owner: 5, updatedAt: blank.updatedAt }), ValidationError);
+
+  const reloaded = await new Store(dir).load();
+  assert.deepEqual(reloaded.notebook().meta, blank);
+});
+
+test('import: replace also restores notebook details', async () => {
+  const s = await new Store(dir).load();
+  await s.importNotebook({ meta: { title: 'Backup', owner: 'J', updatedAt: '2020-01-01T00:00:00.000Z' }, pages: [] }, 'replace');
+  assert.equal(s.notebook().meta.title, 'Backup');
 });

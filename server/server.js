@@ -63,6 +63,9 @@ async function handleApi(store, req, res, url) {
     if (!(await store.deletePage(pageMatch[1]))) throw new HttpError(404, 'not found');
     return sendJson(res, 200, { ok: true });
   }
+  if (method === 'PUT' && url.pathname === '/api/meta') {
+    return sendJson(res, 200, await store.setMeta(await readJson(req)));
+  }
   if (method === 'POST' && url.pathname === '/api/import') {
     const body = await readJson(req);
     return sendJson(res, 200, await store.importNotebook(body.notebook, body.mode));
