@@ -1,12 +1,12 @@
 # Looseleaf
 
-A private journal that looks and feels like a **leather ring binder full of college-ruled paper**. Open the cover and write, check off to-dos, turn pages, and keep adding sheets.
+A private journal that looks and feels like a **leather-bound notebook full of college-ruled paper**. Open the cover and write, check off to-dos, turn pages, and keep adding sheets.
 It runs entirely on your own computer, with **zero dependencies**: just Node.js and a browser.
 
 <table>
   <tr>
     <td><img src="docs/cover-day.jpg" alt="Closed leather cover with a debossed title"></td>
-    <td><img src="docs/spread-day.jpg" alt="Open binder showing two ruled pages with a checklist"></td>
+    <td><img src="docs/spread-day.jpg" alt="Open notebook showing two ruled pages with a checklist"></td>
   </tr>
   <tr>
     <td><img src="docs/menu.jpg" alt="Slide-out menu with icons and shortcut hints"></td>
@@ -46,10 +46,10 @@ Press <kbd>Ctrl</kbd>+<kbd>/</kbd> (or <kbd>?</kbd>) in the app to see these on 
 
 - **A notebook, not a web page.**
   - A leather cover with a debossed title, stitching, and an elastic band swings open onto a two-page spread.
-  - Pages hang on binder rings, over a wooden desk.
-  - Turning a page animates the sheet over the rings. You can also click a page's dog-eared corner.
+  - The notebook rests on a wooden desk.
+  - Turning a page animates the sheet across the spread. You can also click a page's dog-eared corner.
 - **College-ruled paper.**
-  - 9/32" line spacing, a red margin, and hole punches.
+  - 9/32" line spacing, and a red margin.
   - Text, including wrapped lines, always sits exactly on the rules.
   - The book scales to fit any window, snapped so the rules stay crisp, and switches to single-page mode in narrow windows.
 - **Pages that fill up.** Each A5 sheet holds 24 lines. Type past the bottom and the overflow, even mid-paragraph at a word boundary, moves to the next page. The book turns and your cursor follows.
@@ -92,7 +92,7 @@ public/                Vanilla JS front end (ES modules, no build step)
   js/dictation.js      Web Speech API wrapper and "new line" commands
   js/api.js            The only module that talks to storage (swap point for sync)
   css/base.css         Design tokens, day/night themes, desk
-  css/book.css         Cover, paper, ruling, rings, page turn
+  css/book.css         Cover, paper, ruling, page turn
   css/ui.css           Menu, dialogs, mic, status
   img/icons.svg        SVG icon sprite
 server/

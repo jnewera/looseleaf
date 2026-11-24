@@ -74,45 +74,6 @@
 .book[data-mode="single"] .slot[data-pos="1"] { display: none; }
 .book[data-mode="double"]:is([data-state="closed"], [data-state="opening"], [data-state="closing"]) .slot[data-pos="0"] { opacity: 0; }
 
-/* ---------- Binder rings ---------- */
-.rings {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 50%;
-  width: 0;
-  z-index: 4;
-  pointer-events: none;
-  filter: brightness(var(--metal));
-  transition: opacity .3s ease;
-}
-.rings::before {                              /* the metal spine plate */
-  content: "";
-  position: absolute;
-  left: -12px;
-  width: 24px;
-  top: 7%;
-  bottom: 7%;
-  border-radius: 12px;
-  background: linear-gradient(90deg, #6f6f6f, #d9d9d9 30%, #fbfbfb 50%, #c4c4c4 70%, #6a6a6a);
-  box-shadow: 0 2px 6px rgb(0 0 0 / .35);
-}
-.rings span {
-  position: absolute;
-  left: -38px;
-  width: 76px;
-  height: 15px;
-  border-radius: 8px;
-  transform: translateY(-50%);
-  background: linear-gradient(180deg, #ffffff, #cfcfcf 35%, #7d7d7d 62%, #d8d8d8);
-  box-shadow: 0 3px 4px rgb(0 0 0 / .35), inset 0 -1px 1px rgb(0 0 0 / .3);
-}
-.rings span:nth-child(1) { top: 15%; }
-.rings span:nth-child(2) { top: 50%; }
-.rings span:nth-child(3) { top: 85%; }
-.book[data-mode="single"] .rings,
-.book:is([data-state="closed"], [data-state="opening"], [data-state="closing"]) .rings { opacity: 0; }
-
 /* ---------- Paper ---------- */
 .page {
   position: absolute;
@@ -146,21 +107,6 @@
   opacity: .9;
   pointer-events: none;
 }
-
-.holes span {
-  position: absolute;
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  transform: translateY(-50%);
-  background: var(--hole);
-  box-shadow: inset 1px 2px 3px rgb(0 0 0 / .45);
-}
-.holes span:nth-child(1) { top: 15%; }
-.holes span:nth-child(2) { top: 50%; }
-.holes span:nth-child(3) { top: 85%; }
-.page.left .holes span { right: 18px; }
-.page:is(.right, .single) .holes span { left: 18px; }
 
 .page-head {
   position: absolute;

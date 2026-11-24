@@ -32,8 +32,6 @@
   --rule-color: #a9c4e4;
   --rule-strong: #7fa6d6;
   --margin-color: #e3837f;
-  --hole: #8a6a4a;
-  --metal: 1;                  /* brightness of the binder rings */
 
   /* UI (notecards, menus) */
   --card: #fffdf6;
@@ -59,7 +57,7 @@
     --leather: #4f2f1b; --leather-dark: #2f1b0e; --stitch: rgb(214 186 140 / .45);
     --endpaper: #3a3329; --endpaper-ink: #cdbb9c;
     --paper: #2a2a2c; --paper-edge: #38383b; --ink: #e2e4ea; --ink-muted: #9aa0ab;
-    --rule-color: #3a4c66; --rule-strong: #4b6890; --margin-color: #8e4c4c; --hole: #1d140c; --metal: .62;
+    --rule-color: #3a4c66; --rule-strong: #4b6890; --margin-color: #8e4c4c;
     --card: #2b2824; --card-ink: #ece5d8; --card-muted: #a59a8a; --card-line: #3d3832;
     --accent: #8fb5ef; --hover: rgb(255 240 220 / .07); --hl: rgb(255 200 0 / .35); --danger: #f97066;
     --shadow-lg: 0 2px 4px rgb(0 0 0 / .4), 0 18px 40px rgb(0 0 0 / .6);
@@ -72,7 +70,7 @@
   --leather: #4f2f1b; --leather-dark: #2f1b0e; --stitch: rgb(214 186 140 / .45);
   --endpaper: #3a3329; --endpaper-ink: #cdbb9c;
   --paper: #2a2a2c; --paper-edge: #38383b; --ink: #e2e4ea; --ink-muted: #9aa0ab;
-  --rule-color: #3a4c66; --rule-strong: #4b6890; --margin-color: #8e4c4c; --hole: #1d140c; --metal: .62;
+  --rule-color: #3a4c66; --rule-strong: #4b6890; --margin-color: #8e4c4c;
   --card: #2b2824; --card-ink: #ece5d8; --card-muted: #a59a8a; --card-line: #3d3832;
   --accent: #8fb5ef; --hover: rgb(255 240 220 / .07); --hl: rgb(255 200 0 / .35); --danger: #f97066;
   --shadow-lg: 0 2px 4px rgb(0 0 0 / .4), 0 18px 40px rgb(0 0 0 / .6);
