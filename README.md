@@ -1,29 +1,68 @@
 # Looseleaf
 
-A fast, private journal that looks and feels like a **college-ruled paper notebook**, with checklists you can tick off and pages you can keep adding.
-It runs entirely on your own computer. There are **zero dependencies**: just Node.js and a browser.
+A private journal that looks and feels like a **leather ring binder full of college-ruled paper**. Open the cover and write, check off to-dos, turn pages, and keep adding sheets.
+It runs entirely on your own computer, with **zero dependencies**: just Node.js and a browser.
 
-![Looseleaf in light mode](docs/screenshot-light.png)
+<table>
+  <tr>
+    <td><img src="docs/cover-day.jpg" alt="Closed leather cover with a debossed title"></td>
+    <td><img src="docs/spread-day.jpg" alt="Open binder showing two ruled pages with a checklist"></td>
+  </tr>
+  <tr>
+    <td><img src="docs/menu.jpg" alt="Slide-out menu with icons and shortcut hints"></td>
+    <td><img src="docs/spread-night.jpg" alt="Night mode with dark paper"></td>
+  </tr>
+</table>
 
-<details>
-<summary>Dark mode</summary>
+## Keyboard shortcuts
 
-![Looseleaf in dark mode](docs/screenshot-dark.png)
-</details>
+Press <kbd>Ctrl</kbd>+<kbd>/</kbd> (or <kbd>?</kbd>) in the app to see these on a card.
+
+| Writing | |
+| --- | --- |
+| Checkbox | type `[ ]` then <kbd>Space</kbd> (`[x]` for checked) |
+| Bullet | type `-` or `*` then <kbd>Space</kbd> |
+| Check / uncheck the current line | <kbd>Ctrl</kbd>+<kbd>Enter</kbd> |
+| End a list | <kbd>Enter</kbd> on an empty item |
+| Remove a bullet or checkbox | <kbd>Backspace</kbd> at the start of the line |
+| Undo / redo | <kbd>Ctrl</kbd>+<kbd>Z</kbd> / <kbd>Ctrl</kbd>+<kbd>Y</kbd> |
+
+| Pages | |
+| --- | --- |
+| Next / previous page | <kbd>PageDown</kbd> / <kbd>PageUp</kbd>, or <kbd>Alt</kbd>+<kbd>→</kbd> / <kbd>Alt</kbd>+<kbd>←</kbd> |
+| New page | <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>N</kbd> |
+| Open the notebook | <kbd>Enter</kbd> on the cover |
+
+| Notebook | |
+| --- | --- |
+| Contents & search | <kbd>Ctrl</kbd>+<kbd>K</kbd> or <kbd>Ctrl</kbd>+<kbd>F</kbd> |
+| Dictation on / off | <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>D</kbd> |
+| Keyboard shortcuts | <kbd>Ctrl</kbd>+<kbd>/</kbd> or <kbd>?</kbd> |
+| Close a menu or dialog, stop dictation | <kbd>Esc</kbd> |
+
+<img src="docs/shortcuts.jpg" alt="Keyboard shortcuts card" width="640">
 
 ## Features
 
-- **Real notebook feel.** College-ruled lines (9/32" spacing), a red margin, and hole punches. Text, including wrapped lines, always sits exactly on the rules.
-- **Pages that fill up.** Each page holds 33 lines. Type past the bottom and the overflow, even mid-paragraph at a word boundary, moves to a new page, and your cursor follows it.
-- **Checklists and bullets.** Type `[] ` for a checkbox or `- ` for a bullet. Click a box to check it off. `Ctrl+Enter` toggles the current line.
-- **Autosave.** Every change is saved within about 400 ms, and saving is forced when the window closes. There's no save button.
-- **Search and page index.** Search filters pages live and highlights matches in place (using the CSS Custom Highlight API, so the editable text isn't touched).
+- **A notebook, not a web page.**
+  - A leather cover with a debossed title, stitching, and an elastic band swings open onto a two-page spread.
+  - Pages hang on binder rings, over a wooden desk.
+  - Turning a page animates the sheet over the rings. You can also click a page's dog-eared corner.
+- **College-ruled paper.**
+  - 9/32" line spacing, a red margin, and hole punches.
+  - Text, including wrapped lines, always sits exactly on the rules.
+  - The book scales to fit any window, snapped so the rules stay crisp, and switches to single-page mode in narrow windows.
+- **Pages that fill up.** Each A5 sheet holds 24 lines. Type past the bottom and the overflow, even mid-paragraph at a word boundary, moves to the next page. The book turns and your cursor follows.
+- **Checklists and bullets.** Type `[ ] ` or `- `, then click a box to check it off.
+- **Dictation.** Click the mic button (or press <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>D</kbd>) and speak. A live caption shows what's being heard, and saying "new line" starts a new line.
+- **Contents & search.** A contents page lists every entry with dotted leaders to its page number. Search filters it live and highlights matches on the page, using the CSS Custom Highlight API so the editable text is never touched.
+- **Everything else lives in one menu:** new page, delete page (always asks first), notebook title and owner, night mode, export, import, and close.
+- **Autosave** within about 400 ms of each change. There's no save button.
 - **Backups you control.**
   - Export to JSON (a full backup) or Markdown (readable).
-  - Import a backup with *merge* or *replace*.
+  - Import with *merge* or *replace*.
   - Automatic daily backups, keeping the last 30.
-- **Dark mode.** Follows your OS setting, with a manual toggle.
-- **Undo/redo**, multi-line paste that understands Markdown lists, and keyboard shortcuts.
+- **Night mode.** A dark walnut desk and dimmed paper. It follows your OS setting, with a manual toggle.
 
 ## Quick start
 
@@ -35,40 +74,41 @@ cd looseleaf
 npm start            # → http://127.0.0.1:4317
 ```
 
-**On Windows**, double-click `Looseleaf.vbs`. It starts the server in the background (only if it isn't already running) and opens the journal in its own Edge app window. For one-click access, right-click it and choose *Send to → Desktop (create shortcut)*.
+**On Windows**, double-click `Looseleaf.vbs`. It starts the server in the background (only if it isn't already running) and opens Looseleaf in its own Edge app window. For one-click access, right-click it and choose *Send to → Desktop (create shortcut)*.
 
 Your entries are stored in `data/journal.json`, with daily backups in `data/backups/`. The `data/` folder is gitignored and never leaves your machine.
 
-| Shortcut | Action |
-| --- | --- |
-| `[] ` / `[x] ` | Start a checkbox (unchecked / checked) |
-| `- ` or `* ` | Start a bullet |
-| `Enter` on an empty bullet/checkbox | End the list |
-| `Ctrl+Enter` | Toggle the checkbox on the current line |
-| `Ctrl+Z` / `Ctrl+Y` | Undo / redo |
-| `Ctrl+F` | Search |
-| `Ctrl+Shift+N` | New page |
+> **About dictation:** it uses the browser's built-in speech recognition (Web Speech API). Edge, Chrome, and Safari send the audio to their speech service (Microsoft, Google, or Apple) to transcribe it. Your journal itself stays local. Where the API isn't available (Firefox), the mic button is hidden.
 
 ## Architecture
 
 ```
-public/              Vanilla JS front end (ES modules, no build step)
-  js/editor.js       PageEditor: contenteditable page, line types, overflow, undo
-  js/app.js          Pages, autosave, index, search, import/export, theme
-  js/api.js          The only module that talks to storage (swap point for sync)
-  css/notebook.css   Paper, ruling, and light/dark themes
+public/                Vanilla JS front end (ES modules, no build step)
+  js/app.js            State, autosave, page operations, import/export, wiring
+  js/book.js           Views/spreads, page-turn and cover animations, fit-to-window
+  js/editor.js         PageEditor: contenteditable page, line types, overflow, undo
+  js/menu.js           Menu panel, contents/search, dialogs
+  js/shortcuts.js      Shortcut table → shortcuts card, menu hints, tooltips
+  js/dictation.js      Web Speech API wrapper and "new line" commands
+  js/api.js            The only module that talks to storage (swap point for sync)
+  css/base.css         Design tokens, day/night themes, desk
+  css/book.css         Cover, paper, ruling, rings, page turn
+  css/ui.css           Menu, dialogs, mic, status
+  img/icons.svg        SVG icon sprite
 server/
-  store.js           JSON storage: validation, atomic writes, backups, LWW merge
-  server.js          node:http server: static files and a small REST API
-test/                node:test suites for storage and HTTP
+  store.js             JSON storage: validation, atomic writes, backups, LWW merge
+  server.js            node:http server: static files and a small REST API
+test/                  node:test suites for storage and HTTP
 ```
 
 **Design notes**
 
-- **Ruled lines are pure CSS.** A `repeating-linear-gradient` draws the rules. The editor's `line-height` equals the rule spacing (27px), so every rendered row, wrapped or not, lands on a rule. Pages are a fixed width so that line wrapping, and therefore page overflow, is deterministic.
-- **The editor keeps a flat DOM.** Each line is one `<div class="ln" data-type>` holding plain text, so the DOM maps 1:1 to the data model. Browser quirks (injected spans, stray text nodes) are normalized after every input. Rich-text formatting is blocked.
-- **Overflow:** when content is taller than the page, trailing blocks move to the next page. If a paragraph straddles the bottom edge, a binary search finds the longest prefix that fits and splits it at a word boundary.
-- **Safe storage.** Writes go to a temp file that is then renamed over the real one, so a crash can't corrupt the journal. Writes are serialized through a promise queue.
+- **Ruled lines are pure CSS.** A `repeating-linear-gradient` draws the rules. The editor's `line-height` equals the rule spacing (27px), so every row lands on a rule. Editors are the same width on left and right pages, so wrapping, and therefore page overflow, never changes when a page moves.
+- **Scaling without breaking measurement.** The book is scaled with a CSS `transform`, which doesn't affect layout values like `scrollHeight`. Overflow math stays exact at any window size.
+- **Only visible pages get editors.** Overflow onto a page that isn't showing is measured in an off-screen container, and the cascade continues from there.
+- **The editor keeps a flat DOM.** Each line is one `<div class="ln" data-type>` holding plain text, so the DOM maps 1:1 to the data model. Browser quirks are normalized after every input, and undo/redo is snapshot-based.
+- **Animations never block work.** Page turns are queued, and each one has a timeout fallback, so a paused animation (for example in a hidden window) can't freeze navigation.
+- **Safe storage.** Writes go to a temp file that's then renamed over the real one, and are serialized through a promise queue.
 - **Security, even though it's local:**
   - The server binds to `127.0.0.1` only.
   - It rejects non-localhost `Host` headers (blocking DNS rebinding).
@@ -79,9 +119,10 @@ test/                node:test suites for storage and HTTP
 
 | Method | Path | Description |
 | --- | --- | --- |
-| `GET` | `/api/notebook` | All pages, including deletion tombstones |
+| `GET` | `/api/notebook` | Notebook details plus all pages, including deletion tombstones |
 | `PUT` | `/api/pages/:id` | Create or update a page (last write wins on `updatedAt`) |
 | `DELETE` | `/api/pages/:id` | Soft-delete a page |
+| `PUT` | `/api/meta` | Update the notebook's title and owner |
 | `POST` | `/api/import` | `{ mode: "merge" \| "replace", notebook }` |
 
 ## Testing
@@ -90,7 +131,7 @@ test/                node:test suites for storage and HTTP
 npm test
 ```
 
-Covers persistence, atomic writes, last-write-wins, tombstones, backup rotation, import modes, input validation, the Host and content-type guards, and path traversal. CI runs the suite on Ubuntu and Windows.
+Covers persistence, atomic writes, last-write-wins, tombstones, backup rotation, import modes, notebook details, input validation, the Host and content-type guards, and path traversal. CI runs the suite on Ubuntu and Windows.
 
 ## Roadmap
 
