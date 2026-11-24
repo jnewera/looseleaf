@@ -1,11 +1,12 @@
 // Export helpers: full JSON backup and a readable Markdown copy.
 
-export function toJson(pages) {
-  return JSON.stringify({ version: 1, exportedAt: new Date().toISOString(), pages }, null, 2);
+export function toJson(pages, meta) {
+  return JSON.stringify({ version: 1, exportedAt: new Date().toISOString(), meta, pages }, null, 2);
 }
 
-export function toMarkdown(pages) {
-  const out = ['# Looseleaf', ''];
+export function toMarkdown(pages, meta = { title: 'Looseleaf', owner: '' }) {
+  const out = [`# ${meta.title}`, ''];
+  if (meta.owner) out.push(`*${meta.owner}*`, '');
   pages.forEach((page, i) => {
     out.push(`## Page ${i + 1} · ${page.date}`, '');
     for (const line of page.lines) {

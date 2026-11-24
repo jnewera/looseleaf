@@ -16,9 +16,10 @@ async function request(method, url, body, { keepalive = false } = {}) {
 }
 
 export const api = {
-  /** @returns {Promise<{version:number, pages:object[]}>} all pages, including tombstones */
+  /** @returns {Promise<{version:number, meta:object, pages:object[]}>} all pages, including tombstones */
   getNotebook: () => request('GET', '/api/notebook'),
   savePage: (page, opts) => request('PUT', `/api/pages/${encodeURIComponent(page.id)}`, page, opts),
   deletePage: (id) => request('DELETE', `/api/pages/${encodeURIComponent(id)}`),
+  saveMeta: (meta) => request('PUT', '/api/meta', meta),
   importNotebook: (notebook, mode) => request('POST', '/api/import', { notebook, mode }),
 };

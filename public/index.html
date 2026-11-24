@@ -7,55 +7,181 @@
   <link rel="icon" href="icon.svg" type="image/svg+xml">
   <!-- Applies the saved theme before first paint to avoid a flash. -->
   <script src="js/theme-init.js"></script>
-  <link rel="stylesheet" href="css/notebook.css">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/book.css">
+  <link rel="stylesheet" href="css/ui.css">
 </head>
 <body>
-  <aside class="sidebar">
-    <header class="sidebar-head">
-      <h1>Looseleaf</h1>
-      <button id="theme-toggle" class="icon-btn" type="button" title="Toggle dark mode" aria-label="Toggle dark mode">◐</button>
-    </header>
-    <input id="search" type="search" placeholder="Search pages…  (Ctrl+F)" autocomplete="off" spellcheck="false">
-    <nav id="index" class="index" aria-label="Pages"></nav>
-    <footer class="sidebar-foot">
-      <button id="new-page" type="button" title="Ctrl+Shift+N">+ New page</button>
-      <div class="row">
-        <button id="export-json" type="button" title="Full backup you can import later">Export JSON</button>
-        <button id="export-md" type="button" title="Readable Markdown copy">Export MD</button>
+  <div class="desk">
+    <button id="menu-btn" class="desk-btn" type="button" aria-haspopup="menu" aria-expanded="false" aria-controls="menu" title="Menu">
+      <svg class="icon" aria-hidden="true"><use href="img/icons.svg#menu"/></svg>
+      <span class="sr-only">Menu</span>
+    </button>
+
+    <main class="stage">
+      <div class="book-wrap">
+        <div class="book" data-state="closed" data-mode="double">
+          <div class="book-body">
+            <div class="binder-back" aria-hidden="true"></div>
+
+            <div class="spread">
+              <div class="slot" data-pos="0"></div>
+              <div class="slot" data-pos="1"></div>
+              <div class="leaf" aria-hidden="true">
+                <div class="leaf-face leaf-front"></div>
+                <div class="leaf-face leaf-back"></div>
+              </div>
+              <div class="rings" aria-hidden="true"><span></span><span></span><span></span></div>
+            </div>
+
+            <div class="cover">
+              <div class="cover-front" role="button" tabindex="0" aria-label="Open notebook">
+                <div class="cover-spine"></div>
+                <div class="cover-stitch"></div>
+                <div class="cover-label">
+                  <h1 class="cover-title">Looseleaf</h1>
+                  <div class="cover-rule"></div>
+                  <p class="cover-owner"></p>
+                </div>
+                <div class="cover-band"></div>
+              </div>
+              <div class="cover-inside">
+                <div class="endpaper">
+                  <p class="endpaper-label">This journal belongs to</p>
+                  <button class="endpaper-owner" type="button" title="Edit notebook details"></button>
+                  <p class="endpaper-title"></p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
-      <button id="import" type="button">Import backup…</button>
-      <input id="import-file" type="file" accept=".json,application/json" hidden>
-      <p id="status" class="status" role="status">Loading…</p>
-    </footer>
-  </aside>
 
-  <main id="notebook" class="notebook"></main>
+      <div class="book-bar">
+        <button id="prev-btn" class="bar-btn" type="button" aria-label="Previous page">
+          <svg class="icon" aria-hidden="true"><use href="img/icons.svg#chevron-left"/></svg>
+        </button>
+        <span id="page-label" class="page-label" aria-live="polite"></span>
+        <button id="next-btn" class="bar-btn" type="button" aria-label="Next page">
+          <svg class="icon" aria-hidden="true"><use href="img/icons.svg#chevron-right"/></svg>
+        </button>
+        <button id="mic-btn" class="mic-btn" type="button" aria-pressed="false" hidden>
+          <svg class="icon icon-on" aria-hidden="true"><use href="img/icons.svg#mic"/></svg>
+          <span class="sr-only">Dictation</span>
+        </button>
+      </div>
+    </main>
 
-  <template id="page-template">
-    <section class="page">
-      <div class="holes" aria-hidden="true"><span></span><span></span><span></span></div>
-      <header class="page-head">
-        <input class="page-date" type="date" aria-label="Page date">
-        <span class="page-num"></span>
-        <button class="page-delete icon-btn" type="button" title="Delete page" aria-label="Delete page">✕</button>
-      </header>
-      <div class="editor" contenteditable="true" spellcheck="true" role="textbox" aria-multiline="true"></div>
-    </section>
-  </template>
+    <div id="tip" class="tip" hidden>
+      <svg class="icon" aria-hidden="true"><use href="img/icons.svg#keyboard"/></svg>
+      <p>Tip: press <kbd>Ctrl</kbd>+<kbd>/</kbd> to see keyboard shortcuts.</p>
+      <button id="tip-close" class="icon-btn" type="button" aria-label="Dismiss tip">
+        <svg class="icon" aria-hidden="true"><use href="img/icons.svg#close"/></svg>
+      </button>
+    </div>
+    <p id="status" class="status" role="status"></p>
+    <div id="dictation-caption" class="dictation-caption" hidden><span class="dot"></span><span class="text">Listening…</span></div>
+  </div>
 
-  <dialog id="import-dialog">
+  <!-- Slide-out menu (a notecard) -->
+  <div id="menu-scrim" class="scrim" hidden></div>
+  <nav id="menu" class="menu" role="menu" aria-label="Notebook menu" hidden>
+    <header class="menu-head">
+      <span class="menu-title">Looseleaf</span>
+      <button class="icon-btn" type="button" data-action="close-menu" aria-label="Close menu">
+        <svg class="icon" aria-hidden="true"><use href="img/icons.svg#close"/></svg>
+      </button>
+    </header>
+    <div class="menu-items"></div>
+  </nav>
+
+  <!-- Contents & search -->
+  <dialog id="contents-dialog" class="sheet contents" aria-labelledby="contents-title">
+    <header class="sheet-head">
+      <h2 id="contents-title">Contents</h2>
+      <button class="icon-btn" type="button" data-close aria-label="Close">
+        <svg class="icon" aria-hidden="true"><use href="img/icons.svg#close"/></svg>
+      </button>
+    </header>
+    <label class="search-field">
+      <svg class="icon" aria-hidden="true"><use href="img/icons.svg#search"/></svg>
+      <input id="search" type="search" placeholder="Search every page…" autocomplete="off" spellcheck="false">
+    </label>
+    <ol id="contents-list" class="contents-list"></ol>
+  </dialog>
+
+  <!-- Delete confirmation -->
+  <dialog id="delete-dialog" class="sheet confirm" aria-labelledby="delete-title">
     <form method="dialog">
-      <h2>Import backup</h2>
+      <h2 id="delete-title"></h2>
+      <p class="confirm-date"></p>
+      <blockquote class="confirm-preview"></blockquote>
+      <p class="confirm-warn">This can't be undone.</p>
+      <menu>
+        <button value="cancel" autofocus>Cancel</button>
+        <button value="delete" class="danger">
+          <svg class="icon" aria-hidden="true"><use href="img/icons.svg#trash"/></svg> Delete page
+        </button>
+      </menu>
+    </form>
+  </dialog>
+
+  <!-- Notebook details -->
+  <dialog id="details-dialog" class="sheet" aria-labelledby="details-title">
+    <form method="dialog">
+      <h2 id="details-title">Notebook details</h2>
+      <label class="field">Title <input id="details-title-input" maxlength="80" required></label>
+      <label class="field">Belongs to <input id="details-owner-input" maxlength="80" placeholder="Your name"></label>
+      <menu>
+        <button value="cancel" formnovalidate>Cancel</button>
+        <button value="save" class="primary">Save</button>
+      </menu>
+    </form>
+  </dialog>
+
+  <!-- Import -->
+  <dialog id="import-dialog" class="sheet" aria-labelledby="import-title">
+    <form method="dialog">
+      <h2 id="import-title">Import backup</h2>
       <p id="import-summary"></p>
       <p><strong>Merge</strong> keeps the newer copy of each page.<br>
-         <strong>Replace</strong> swaps your whole journal for the backup. A safety backup is saved first either way.</p>
+         <strong>Replace</strong> swaps your whole notebook for the backup. A safety backup is saved first either way.</p>
       <menu>
-        <button value="cancel">Cancel</button>
+        <button value="cancel" autofocus>Cancel</button>
         <button value="merge">Merge</button>
         <button value="replace" class="danger">Replace</button>
       </menu>
     </form>
   </dialog>
+  <input id="import-file" type="file" accept=".json,application/json" hidden>
+
+  <!-- Keyboard shortcuts -->
+  <dialog id="shortcuts-dialog" class="sheet shortcuts" aria-labelledby="shortcuts-title">
+    <header class="sheet-head">
+      <h2 id="shortcuts-title">Keyboard shortcuts</h2>
+      <button class="icon-btn" type="button" data-close aria-label="Close">
+        <svg class="icon" aria-hidden="true"><use href="img/icons.svg#close"/></svg>
+      </button>
+    </header>
+    <div id="shortcuts-body" class="shortcuts-body"></div>
+  </dialog>
+
+  <!-- Page markup cloned for each visible page -->
+  <template id="page-template">
+    <section class="page">
+      <div class="holes" aria-hidden="true"><span></span><span></span><span></span></div>
+      <header class="page-head">
+        <button class="page-date" type="button" title="Change date"></button>
+        <input class="page-date-input" type="date" tabindex="-1" aria-hidden="true">
+      </header>
+      <div class="editor" spellcheck="true" role="textbox" aria-multiline="true"></div>
+      <footer class="page-foot"><span class="page-num"></span></footer>
+      <button class="corner" type="button" tabindex="-1"></button>
+    </section>
+  </template>
+
+  <!-- Off-screen area for laying out pages that aren't visible (overflow measuring) -->
+  <div id="measure" class="measure" aria-hidden="true"></div>
 
   <script type="module" src="js/app.js"></script>
 </body>

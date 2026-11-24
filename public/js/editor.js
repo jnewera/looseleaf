@@ -35,6 +35,11 @@ function setText(b, text) {
 
 const textOf = (b) => b.textContent.replace(/​/g, '');
 
+/** Render lines read-only (page-turn copies, off-screen previews). */
+export function fillStatic(el, lines) {
+  el.replaceChildren(...(lines.length ? lines : [{}]).map(makeBlock));
+}
+
 function toLine(b) {
   const type = b.dataset.type ?? 'text';
   const line = { type, text: textOf(b) };
@@ -55,6 +60,7 @@ export class PageEditor {
     this.hIndex = -1;
     this.hTimer = null;
 
+    el.contentEditable = 'true';
     el.addEventListener('keydown', (e) => this.#onKeyDown(e));
     el.addEventListener('beforeinput', (e) => this.#onBeforeInput(e));
     el.addEventListener('input', () => this.#onInput());
@@ -99,6 +105,31 @@ export class PageEditor {
   focusAt(i = 0, o = 0) {
     const b = this.el.children[Math.min(i, this.el.children.length - 1)];
     if (b) this.#setCaret(b, o);
+  }
+
+  /** Put the caret at the end of the last line. */
+  focusEnd() {
+    const b = this.el.lastElementChild;
+    if (b) this.#setCaret(b, textOf(b).length);
+  }
+
+  /** If the content no longer fits (older page sizes, font changes), push the excess onward. */
+  reflow() {
+    if (this.#checkOverflow()) {
+      this.onChange();
+      this.resetHistory();
+    }
+  }
+
+  /** Same as pressing Enter at the caret (used by dictation's "new line"). */
+  newLine() {
+    this.#splitBlock();
+  }
+
+  /** Text in the current line before the caret, or null if the caret isn't here. */
+  textBeforeCaret() {
+    const b = this.#currentBlock();
+    return b ? textOf(b).slice(0, this.#caretOffset(b)) : null;
   }
 
   // ---------- Caret helpers ----------
@@ -150,7 +181,6 @@ export class PageEditor {
     const sel = getSelection();
     sel.removeAllRanges();
     sel.addRange(range);
-    b.scrollIntoView({ block: 'nearest' });
   }
 
   // ---------- Events ----------
@@ -268,8 +298,9 @@ export class PageEditor {
     if (!b || b.parentNode !== this.el || b.dataset.type !== 'todo') return;
     const r = b.getBoundingClientRect();
     const rule = parseFloat(getComputedStyle(this.el).lineHeight);
+    const k = r.width / b.offsetWidth || 1; // the book may be scaled to fit the window
     // The checkbox is drawn in the block's left padding on its first row.
-    if (e.clientX - r.left < 24 && e.clientY - r.top < rule) {
+    if ((e.clientX - r.left) / k < 24 && (e.clientY - r.top) / k < rule) {
       e.preventDefault(); // don't move the caret
       this.#toggle(b);
     }
